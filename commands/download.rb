@@ -3,11 +3,11 @@ module Download
 
   command(:download) do |event|
     tardis_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/')
-    tardis_parsed = Nokogiri::HTML.parse(page1.body)
+    tardis_parsed = Nokogiri::HTML.parse(tardis_site.body)
     tardis_build = doc.at('#breadcrumbs > li:nth-child(5) > a').text
 
     tardis_chunk_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISChunkGenerator/lastSuccessfulBuild/')
-    tardis_chunk_parsed = Nokogiri::HTML.parse(page1.body)
+    tardis_chunk_parsed = Nokogiri::HTML.parse(tardis_chunk_site.body)
     tardis_chunk_build = doc.at('#breadcrumbs > li:nth-child(7) > a').text
     event.channel.send_embed do |embed|
       embed.title "Handles Help"
