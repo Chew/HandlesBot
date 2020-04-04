@@ -7,7 +7,7 @@ module Wiki
       embed.description = 'Searching the wiki...'
     end
 
-    wiki_site = RestClient.get('https://eccentricdevotion.github.io/TARDIS/site-map.html/')
+    wiki_site = RestClient.get('https://eccentricdevotion.github.io/TARDIS/site-map.html')
     wiki_parsed = Nokogiri::HTML.parse(wiki_site.body)
 
     length = wiki_parsed.search("a").length
