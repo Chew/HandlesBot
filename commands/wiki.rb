@@ -1,7 +1,8 @@
 module Wiki
   extend Discordrb::Commands::CommandContainer
 
-  command(:wiki, min_args: 1, max_args: 1) do |event, search|
+  command(:wiki, min_args: 1) do |event, *search|
+    search = search.join(' ')
     m = event.channel.send_embed do |embed|
       embed.title = 'Handles Wiki Search'
       embed.description = 'Searching the wiki...'
