@@ -7,7 +7,7 @@ CONFIG = YAML.load_file('config.yaml')
 
 Bot = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
                                           client_id: CONFIG['client_id'],
-                                          prefix: ['handles', 'hey handles'],
+                                          prefix: ['handles', 'hey handles', 'handles,', 'hey handles,'],
                                           spaces_allowed: true,
                                           help_command: false
 
