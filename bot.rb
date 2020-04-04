@@ -1,6 +1,7 @@
 require 'discordrb'
 require 'yaml'
 require 'rest-client'
+require 'nokogiri'
 
 CONFIG = YAML.load_file('config.yaml')
 
