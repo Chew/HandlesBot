@@ -13,7 +13,7 @@ Bot = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
 
 def loadpls
   Bot.clear!
-  Dir["#{File.dirname(__FILE__)}/plugins/*.rb"].sort.each do |wow|
+  Dir["#{File.dirname(__FILE__)}/commands/*.rb"].sort.each do |wow|
     load wow
     require wow
     bob = File.readlines(wow) { |line| line.split.map(&:to_s).join }
@@ -21,7 +21,7 @@ def loadpls
     command.delete!("\n")
     command = Object.const_get(command)
     Bot.include! command
-    puts "Plugin #{command} successfully loaded!"
+    puts "Command #{command} successfully loaded!"
   end
 end
 
