@@ -23,7 +23,7 @@ module Wiki
     results.push "No results found" if results.empty?
 
     embed = Discordrb::Webhooks::Embed.new(
-      title: 'Handles Wiki Search'
+      title: 'Handles Wiki Search',
       description: "Results:\n" + results.join("\n")
     )
 
