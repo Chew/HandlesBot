@@ -10,15 +10,27 @@ Bot = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
                                           spaces_allowed: true,
                                           help_command: false
 
-Dir["#{File.dirname(__FILE__)}/commands/*.rb"].each do |wow|
-  require file
-  load file
-  bob = File.readlines(wow) { |line| line.split.map(&:to_s).join }
-  command = bob[0][7..bob[0].length]
-  command.delete!("\n")
-  command = Object.const_get(command)
-  Bot.include! command
-  puts "Plugin #{command} successfully loaded!"
+def loadpls
+  Bot.clear!
+  Dir["#{File.dirname(__FILE__)}/plugins/*.rb"].sort.each do |wow|
+    load wow
+    require wow
+    bob = File.readlines(wow) { |line| line.split.map(&:to_s).join }
+    command = bob[0][7..bob[0].length]
+    command.delete!("\n")
+    command = Object.const_get(command)
+    Bot.include! command
+    puts "Plugin #{command} successfully loaded!"
+  end
+end
+
+loadpls
+
+Bot.command(:reload) do |event|
+  break unless event.user.id == CONFIG['owner_id']
+
+  loadpls
+  event.respond 'Reloaded sucessfully!'
 end
 
 puts 'Done loading plugins! Finalizing start-up'
