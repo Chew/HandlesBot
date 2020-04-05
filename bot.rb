@@ -46,10 +46,11 @@ def check_for_build
     latest_on_jenkins = tardis_parsed.at('#breadcrumbs > li:nth-child(5) > a').text.gsub('#', '').to_i
 
     if latest_on_jenkins != latest_in_server
-      changes = tardis_parsed.at('#main-panel > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(2) > ol:nth-child(1)').text
+      changes = tardis_parsed.at('#main-panel > table').children[1].text.split('(details / githubweb)').map{|e| e.gsub('  ', '')}.delete_if{|e| !e.include?("commit:")}.map{|e| e.gsub("\nChanges\n", '')}.map{|e| e.split(' (commit:').first}
+
       Bot.channel(696383624563392552).send_embed do |embed|
         embed.title = "TARDIS Build \##{latest_on_jenkins} is now available!"
-        embed.description = "[Download it here!](http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/)\n#{changes}"
+        embed.description = "[Download it here!](http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/)\nChanges:\n#{changes.join("\n")}"
       end
       puts "New build found!"
     else
