@@ -43,7 +43,7 @@ module Download
       embed.description = "TARDIS Has Plenty of Optional Addons! Check them out below. There are also resource packs, check those out with `handes, resourcepacks`"
       embed.add_field(name: 'TARDISSonicBlaster', value: "[Download Build (Loading...)](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISSonicBlaster/)\nThe Squareness Gun", inline: true)
       embed.add_field(name: 'TARDISVortexManipulator', value: "[Download Build (Loading...)](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISVortexManipulator/)\nVortex manipulator. Cheap and nasty time travel. Very bad for you. I'm trying to give it up.", inline: true)
-      embed.add_field(name: 'TARDISWeepingAngels', value: "[Download Build (Loading...)](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISWeepingAngels/)\nThis plugin tranforms skeletons into terrifying Weeping Angels (as seen on Doctor Who). It also has Cybermen, Daleks, Empty Children, Ood, Silurians, Sontarans, Strax, Vashta Nerada and Zygons.", inline: true)
+      embed.add_field(name: 'TARDISWeepingAngels', value: "[Download Build (Loading...)](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISWeepingAngels/)\nThis plugin tranforms skeletons into terrifying Weeping Angels (as seen on Doctor Who). It also has Cybermen, Daleks, Empty Children, Ood, Silurians, Sontarans, Strax, Vashta Nerada and Zygons.", inline: false)
     end
 
     addons_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/view/TARDIS/')
@@ -59,18 +59,18 @@ module Download
       fields: [
         Discordrb::Webhooks::EmbedField.new(
           name: 'TARDISSonicBlaster',
-          value: "[Build #{sbv}](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISSonicBlaster/)\nThe Squareness Gun",
+          value: "[Download Build #{sbv}](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISSonicBlaster/)\nThe Squareness Gun",
           inline: true
         ),
         Discordrb::Webhooks::EmbedField.new(
           name: 'TARDISVortexManipulator',
-          value: "[Build #{vmv}](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISVortexManipulator/)\nVortex manipulator. Cheap and nasty time travel. Very bad for you. I'm trying to give it up.",
+          value: "[Download Build #{vmv}](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISVortexManipulator/)\nVortex manipulator. Cheap and nasty time travel. Very bad for you. I'm trying to give it up.",
           inline: true
         ),
         Discordrb::Webhooks::EmbedField.new(
           name: 'TARDISWeepingAngels',
-          value: "[Build #{wav}](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISWeepingAngels/)\nThis plugin tranforms skeletons into terrifying Weeping Angels (as seen on Doctor Who). It also has Cybermen, Daleks, Empty Children, Ood, Silurians, Sontarans, Strax, Vashta Nerada and Zygons.",
-          inline: true
+          value: "[Download Build #{wav}](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISWeepingAngels/)\nThis plugin tranforms skeletons into terrifying Weeping Angels (as seen on Doctor Who). It also has Cybermen, Daleks, Empty Children, Ood, Silurians, Sontarans, Strax, Vashta Nerada and Zygons.",
+          inline: false
         )
       ]
     )
