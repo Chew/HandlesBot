@@ -36,7 +36,7 @@ def check_for_build
   puts "Checking for new builds..."
   begin
     begin
-      latest_in_server = Bot.channel(696383624563392552).history(1)[0].embeds[0].title.split('#').first.split(' ').first.to_i
+      latest_in_server = Bot.channel(696383624563392552).history(1)[0].embeds[0].title.split('#').last.split(' ').first.to_i
     rescue StandardError
       latest_in_server = 0
     end
