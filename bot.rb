@@ -50,7 +50,7 @@ def check_for_build
 
       Bot.channel(696383624563392552).send_embed do |embed|
         embed.title = "TARDIS Build \##{latest_on_jenkins} is now available!"
-        embed.description = "[Download it here!](http://tardisjenkins.duckdns.org:8080/job/TARDIS/#{latest_on_jenkins}/)\n\nChanges:\n* #{changes.join("\n *")}"
+        embed.description = "[Download it here!](http://tardisjenkins.duckdns.org:8080/job/TARDIS/#{latest_on_jenkins}/)\n\nChanges:\n* #{changes.join("\n* ")}"
       end
       puts "New build found!"
     else
