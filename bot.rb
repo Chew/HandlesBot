@@ -12,7 +12,8 @@ Bot = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
                                           client_id: CONFIG['client_id'],
                                           prefix: ['handles', 'hey handles', 'handles,', 'hey handles,'],
                                           spaces_allowed: true,
-                                          help_command: false
+                                          help_command: false,
+                                          ignore_bots: false
 
 def loadpls
   Bot.clear!
@@ -28,7 +29,18 @@ def loadpls
   end
 end
 
-Scheduler.every('5m') do
+Bot.message(in: 696383624563392552) do |event|
+  puts "Meme Detected"
+  messageid = event.message.id
+  puts "Message ID: #{event.message.id}"
+  begin
+    RestClient.post("https://discord.com/api/v6/channels/696383624563392552/messages/#{messageid}/crosspost", nil, Authorization: Bot.token)
+  rescue RestClient::Unauthorized => e
+    puts "You done hecked up. Error: #{e.response.body}"
+  end
+end
+
+Scheduler.every('2m') do
   check_for_build
 end
 
@@ -41,16 +53,15 @@ def check_for_build
       latest_in_server = 0
     end
 
-    tardis_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/')
-    tardis_parsed = Nokogiri::HTML.parse(tardis_site.body)
-    latest_on_jenkins = tardis_parsed.at('#breadcrumbs > li:nth-child(5) > a').text.gsub('#', '').to_i
+    tardis_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/api/json/')
+    latest_on_jenkins = tardis_site['number'].to_i
 
     if latest_on_jenkins != latest_in_server
-      changes = tardis_parsed.at('#main-panel > table').children[1].text.split('(details / githubweb)').map{|e| e.gsub('  ', '')}.delete_if{|e| !e.include?("commit:")}.map{|e| e.gsub("\nChanges\n", '')}.map{|e| e.split(' (commit:').first}
+      changes = tardis_site['changeSet']['items'].map { |e| e['comment'] }
 
       Bot.channel(696383624563392552).send_embed do |embed|
         embed.title = "TARDIS Build \##{latest_on_jenkins} is now available!"
-        embed.description = "[Download it here!](http://tardisjenkins.duckdns.org:8080/job/TARDIS/#{latest_on_jenkins}/)\n\nChanges:\n* #{changes.join("\n* ")}"
+        embed.description = "[Download it here!](#{tardis_site['url']}/)\n\nChanges:\n* #{changes.join("\n* ")}"
       end
       puts "New build found!"
     else
