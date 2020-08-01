@@ -1,5 +1,6 @@
 require 'discordrb'
 require 'yaml'
+require 'json'
 require 'rest-client'
 require 'nokogiri'
 require 'rufus-scheduler'
@@ -53,11 +54,11 @@ def check_for_build
       latest_in_server = 0
     end
 
-    tardis_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/api/json/')
+    tardis_site = JSON.parse(RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/api/json/'))
     latest_on_jenkins = tardis_site['number'].to_i
 
     if latest_on_jenkins != latest_in_server
-      changes = tardis_site['changeSet']['items'].map { |e| e['comment'] }
+      changes = tardis_site['changeSet']['items'].map { |e| e['comment'].chomp }
 
       Bot.channel(696383624563392552).send_embed do |embed|
         embed.title = "TARDIS Build \##{latest_on_jenkins} is now available!"
