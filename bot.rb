@@ -14,7 +14,7 @@ Bot = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
                                           prefix: ['handles', 'hey handles', 'handles,', 'hey handles,'],
                                           spaces_allowed: true,
                                           help_command: false,
-                                          ignore_bots: false
+                                          ignore_bots: true
 
 def loadpls
   Bot.clear!
@@ -27,17 +27,6 @@ def loadpls
     command = Object.const_get(command)
     Bot.include! command
     puts "Command #{command} successfully loaded!"
-  end
-end
-
-Bot.message(in: 696383624563392552) do |event|
-  puts "Meme Detected"
-  messageid = event.message.id
-  puts "Message ID: #{event.message.id}"
-  begin
-    RestClient.post("https://discord.com/api/v6/channels/696383624563392552/messages/#{messageid}/crosspost", nil, Authorization: Bot.token)
-  rescue RestClient::Unauthorized => e
-    puts "You done hecked up. Error: #{e.response.body}"
   end
 end
 
@@ -59,12 +48,19 @@ def check_for_build
 
     if latest_on_jenkins != latest_in_server
       changes = tardis_site['changeSet']['items'].map { |e| e['comment'].chomp }
+      puts "New build found!"
 
-      Bot.channel(696383624563392552).send_embed do |embed|
+      m = Bot.channel(696383624563392552).send_embed do |embed|
         embed.title = "TARDIS Build \##{latest_on_jenkins} is now available!"
         embed.description = "[Download it here!](#{tardis_site['url']}/)\n\nChanges:\n* #{changes.join("\n* ")}"
       end
-      puts "New build found!"
+      messageid = m.id
+      puts "Message ID: #{m.id}"
+      begin
+        RestClient.post("https://discord.com/api/v6/channels/696383624563392552/messages/#{messageid}/crosspost", nil, Authorization: Bot.token)
+      rescue RestClient::Unauthorized => e
+        puts "You done hecked up. Error: #{e.response.body}"
+      end
     else
       puts "Up to date!"
     end
