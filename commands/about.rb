@@ -5,7 +5,7 @@ module About
     event.channel.send_embed do |embed|
       embed.title = 'Hello, I am Handles'
       embed.colour = '36399A'
-      embed.description = 'My purpose is to serve this server! (I suppose IM the server then)'
+      embed.description = 'My purpose is to serve this server!'
 
       embed.add_field(name: 'Commands', value: 'My command list can be found with `handles commands`', inline: true)
     end
@@ -18,6 +18,8 @@ module About
 
       embed.add_field(name: 'Help Commands', value: [
         '`handles download` - Find download links to the TARDIS plugin',
+        '`handles, wiki [term]` - Searches the wiki for [term]',
+        '`handles, addons` - Find download links to TARDIS addons'
       ].join("\n"), inline: false)
     end
   end
