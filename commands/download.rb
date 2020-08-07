@@ -9,13 +9,8 @@ module Download
       embed.add_field(name: 'TARDISChunkGenerator', value: "[Build (Loading...)](http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISChunkGenerator/lastSuccessfulBuild)", inline: true)
     end
 
-    tardis_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/')
-    tardis_parsed = Nokogiri::HTML.parse(tardis_site.body)
-    tardis_build = tardis_parsed.at('#breadcrumbs > li:nth-child(5) > a').text
-
-    tardis_chunk_site = RestClient.get('http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISChunkGenerator/lastSuccessfulBuild/')
-    tardis_chunk_parsed = Nokogiri::HTML.parse(tardis_chunk_site.body)
-    tardis_chunk_build = tardis_chunk_parsed.at('#breadcrumbs > li:nth-child(7) > a').text
+    tardis_build = JSON.parse(RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/api/json'))['number'].to_i
+    tardis_chunk_build = JSON.parse(RestClient.get('http://tardisjenkins.duckdns.org:8080/view/TARDIS/job/TARDISChunkGenerator/lastSuccessfulBuild/api/json'))['number'].to_i
 
     embed = Discordrb::Webhooks::Embed.new(
       title: "Handles Help",
