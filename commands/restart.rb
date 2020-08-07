@@ -1,20 +1,10 @@
 module Restart
   extend Discordrb::Commands::CommandContainer
 
-  command(:restart) do |event|
-    unless event.user.id == CONFIG['owner_id']
-      event.respond "Sorry kiddo, you can't restart the bot!"
-      break
-    end
-    event.respond 'Restarting the bot...'
-    sleep 1
-    exec("pm2 restart #{Bot.shard_key[0]}")
-  end
-
   command(:update) do |event|
     unless event.user.id == CONFIG['owner_id']
       event.respond "Imma keep it real with u chief! You can't update the bot."
-      return
+      break
     end
     m = event.respond 'Updating...'
     changes = `git pull`
@@ -41,10 +31,10 @@ module Restart
           e.description = 'You are running the latest commit.'
           e.color = '00FF00'
         elsif response < commits
-          e.description = "You are running an un-pushed commit! Are you a developer? (Most Recent: #{response})\n**Here are up to 5 most recent commits.**\n#{`git log origin/master..master --pretty=format:\"[%h](http://github.com/Chewsterchew/HQ-DiscordBot/commit/%H) - %s\" -5`}"
+          e.description = "You are running an un-pushed commit! Are you a developer? (Most Recent: #{response})\n**Here are up to 5 most recent commits.**\n#{`git log origin/master..master --pretty=format:\"[%h](http://github.com/Chew/HandlesBot/commit/%H) - %s\" -5`}"
           e.color = 'FFFF00'
         else
-          e.description = "You are #{response - commits} commit(s) behind! Run `hq, update` to update.\n**Here are up to 5 most recent commits.**\n#{`git log master..origin/master --pretty=format:\"[%h](http://github.com/Chewsterchew/HQ-DiscordBot/commit/%H) - %s\" -5`}"
+          e.description = "You are #{response - commits} commit(s) behind! Run `hq, update` to update.\n**Here are up to 5 most recent commits.**\n#{`git log master..origin/master --pretty=format:\"[%h](http://github.com/Chew/HandlesBot/commit/%H) - %s\" -5`}"
           e.color = 'FF0000'
         end
       end
@@ -54,7 +44,7 @@ module Restart
   command(:shoo) do |event|
     unless event.user.id == CONFIG['owner_id']
       event.respond 'Why are you trying to kill Handles? What has he ever done to you? Leave him alone!'
-      return
+      break
     end
     event.respond "I am shutting down, it's been a long run folks!"
     exit
