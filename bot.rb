@@ -5,11 +5,11 @@ require 'rest-client'
 require 'nokogiri'
 require 'rufus-scheduler'
 
-Scheduler = Rufus::Scheduler.new
+SCHEDULER = Rufus::Scheduler.new
 
 CONFIG = YAML.load_file('config.yaml')
 
-Bot = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
+BOT = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
                                           client_id: CONFIG['client_id'],
                                           prefix: ['handles', 'hey handles', 'handles,', 'hey handles,'],
                                           spaces_allowed: true,
@@ -17,7 +17,7 @@ Bot = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
                                           ignore_bots: true
 
 def loadpls
-  Bot.clear!
+  BOT.clear!
   Dir["#{File.dirname(__FILE__)}/commands/*.rb"].sort.each do |wow|
     load wow
     require wow
@@ -25,12 +25,12 @@ def loadpls
     command = bob[0][7..bob[0].length]
     command.delete!("\n")
     command = Object.const_get(command)
-    Bot.include! command
+    BOT.include! command
     puts "Command #{command} successfully loaded!"
   end
 end
 
-Scheduler.every('2m') do
+SCHEDULER.every('2m') do
   check_for_build
 end
 
@@ -38,7 +38,7 @@ def check_for_build
   puts "Checking for new builds..."
   begin
     begin
-      latest_in_server = Bot.channel(696383624563392552).history(1)[0].embeds[0].title.split('#').last.split(' ').first.to_i
+      latest_in_server = BOT.channel(696383624563392552).history(1)[0].embeds[0].title.split('#').last.split(' ').first.to_i
     rescue StandardError
       latest_in_server = 0
     end
@@ -50,14 +50,14 @@ def check_for_build
       changes = tardis_site['changeSet']['items'].map { |e| e['comment'].chomp }
       puts "New build found!"
 
-      m = Bot.channel(696383624563392552).send_embed do |embed|
+      m = BOT.channel(696383624563392552).send_embed do |embed|
         embed.title = "TARDIS Build \##{latest_on_jenkins} is now available!"
         embed.description = "[Download it here!](#{tardis_site['url']}/)\n\nChanges:\n* #{changes.join("\n* ")}"
       end
       messageid = m.id
       puts "Message ID: #{m.id}"
       begin
-        RestClient.post("https://discord.com/api/v6/channels/696383624563392552/messages/#{messageid}/crosspost", nil, Authorization: Bot.token)
+        RestClient.post("https://discord.com/api/v6/channels/696383624563392552/messages/#{messageid}/crosspost", nil, Authorization: BOT.token)
       rescue RestClient::Unauthorized => e
         puts "You done hecked up. Error: #{e.response.body}"
       end
@@ -73,7 +73,7 @@ end
 loadpls
 check_for_build
 
-Bot.command(:reload) do |event|
+BOT.command(:reload) do |event|
   break unless event.user.id == CONFIG['owner_id']
 
   loadpls
@@ -83,4 +83,4 @@ end
 puts 'Done loading plugins! Finalizing start-up'
 
 puts 'Bot is ready!'
-Bot.run
+BOT.run
