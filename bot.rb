@@ -40,7 +40,7 @@ def check_for_build
     begin
       latest_in_server = BOT.channel(696383624563392552).history(1)[0].embeds[0].title.split('#').last.split(' ').first.to_i
     rescue StandardError
-      latest_in_server = 0
+      latest_in_server = 300000
     end
 
     tardis_site = JSON.parse(RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/api/json/'))
