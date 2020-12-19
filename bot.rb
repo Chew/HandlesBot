@@ -40,7 +40,7 @@ def check_for_build
     begin
       latest_in_server = BOT.channel(696383624563392552).history(1)[0].embeds[0].title.split('#').last.split(' ').first.to_i
     rescue StandardError
-      latest_in_server = 300000
+      return
     end
 
     tardis_site = JSON.parse(RestClient.get('http://tardisjenkins.duckdns.org:8080/job/TARDIS/lastSuccessfulBuild/api/json/'))
@@ -59,14 +59,13 @@ def check_for_build
       begin
         RestClient.post("https://discord.com/api/v6/channels/696383624563392552/messages/#{messageid}/crosspost", nil, Authorization: BOT.token)
       rescue RestClient::Unauthorized => e
-        puts "You done hecked up. Error: #{e.response.body}"
+        return
       end
     else
       puts "Up to date!"
     end
-  rescue StandardError => e
-    puts "You failed. You really failed. At getting the latest build. Try again!"
-    puts e
+  rescue StandardError
+    return
   end
 end
 
