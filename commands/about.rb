@@ -19,7 +19,6 @@ module About
       embed.add_field(name: 'Help Commands', value: [
         '`handles download` - Find download links to the TARDIS plugin',
         '`handles, wiki [term]` - Searches the wiki for [term]',
-        '`handles, addons` - Find download links to TARDIS addons'
       ].join("\n"), inline: false)
     end
   end
