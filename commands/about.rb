@@ -17,7 +17,7 @@ module About
       embed.colour = '36399A'
 
       embed.add_field(name: 'Help Commands', value: [
-        '`handles download` - Find download links to the TARDIS plugin',
+        '`handles download` - Find the download link to the TARDIS plugin',
         '`handles, wiki [term]` - Searches the wiki for [term]',
       ].join("\n"), inline: false)
     end
@@ -33,7 +33,7 @@ module About
   end
 
   command(:info, aliases: [:bot]) do |event|
-    t = Time.now - Starttime
+    t = Time.now - STARTTIME
     mm, ss = t.divmod(60)
     hh, mm = mm.divmod(60)
     dd, hh = hh.divmod(24)
@@ -64,24 +64,20 @@ module About
 
   command(:lib) do |event|
     gems = `gem list`.split("\n")
-    libs = ['discordrb', 'rest-client', 'json', 'nokogiri']
+    libs = %w[discordrb rest-client json nokogiri]
     versions = []
     libs.each do |name|
       version = gems[gems.index { |s| s.include?(name) }].split(' ')[1]
       versions[versions.length] = version.delete('(').delete(',').delete(')')
     end
-    begin
       event.channel.send_embed do |e|
         e.title = 'HandlesBot - Open Source Libraries'
 
         (0..libs.length - 1).each do |i|
-          url = "http://rubygems.org/gems/#{libs[i]}/versions/#{versions[i]}"
+          url = "https://rubygems.org/gems/#{libs[i]}/versions/#{versions[i]}"
           e.add_field(name: libs[i], value: "[#{versions[i]}](#{url})", inline: true)
         end
         e.color = '36399A'
       end
-    rescue Discordrb::Errors::NoPermission
-      event.respond 'Hey! It\'s me, money-flippin\' Matt Richards! I need some memes, dreams, and the ability to embed links! You gotta grant me these permissions!'
-    end
   end
 end

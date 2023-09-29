@@ -7,6 +7,8 @@ require 'rufus-scheduler'
 
 SCHEDULER = Rufus::Scheduler.new
 
+STARTTIME = Time.now
+
 CONFIG = YAML.load_file('config.yaml')
 
 BOT = Discordrb::Commands::CommandBot.new token: CONFIG['token'],
