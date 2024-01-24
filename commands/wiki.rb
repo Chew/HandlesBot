@@ -15,7 +15,7 @@ module Wiki
 
     results = []
 
-    wiki_parsed.each do |item|
+    wiki_parsed['searchDocs'].each do |item|
       if item['title'].downcase.include?(search.downcase)
         if item['type'] == 0
           results.push "[#{item['title']}](https://tardis.pages.dev#{item['url']})"
