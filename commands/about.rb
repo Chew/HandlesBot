@@ -64,7 +64,7 @@ module About
 
   command(:lib) do |event|
     gems = `gem list`.split("\n")
-    libs = %w[discordrb rest-client json nokogiri]
+    libs = %w[discordrb rest-client json rufus-scheduler]
     versions = []
     libs.each do |name|
       version = gems[gems.index { |s| s.include?(name) }].split(' ')[1]
